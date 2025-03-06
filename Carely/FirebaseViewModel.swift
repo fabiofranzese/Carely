@@ -131,6 +131,7 @@ class TaskListViewModel: ObservableObject, Identifiable {
                 print(uid)
                 // Doesn't load the tasks: TO FIX
                 var refHandle = ref.child("users/\(uid)/tasks").observe(DataEventType.value, with: {snapshot in
+                    print(snapshot.value)
                     guard let value = snapshot.value as? [String: [String: Any]] else { return }
                     print(value)
                     self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
@@ -140,12 +141,12 @@ class TaskListViewModel: ObservableObject, Identifiable {
     }
     
     func getUID(email: String, completion: @escaping (String?) -> Void) {
-        let ref = Database.database(url: self.databaseURL).reference().child("patients")
+        let ref = Database.database(url: self.databaseURL).reference().child("users")
         ref.observeSingleEvent(of: .value) { snapshot in
             for child in snapshot.children {
                 if let userSnapshot = child as? DataSnapshot,
                    let userData = userSnapshot.value as? [String: Any],
-                   let userEmail = userData["caregiverEmail"] as? String,
+                   let userEmail = userData["email"] as? String,
                    userEmail.lowercased() == email.lowercased() {
                     print(userSnapshot.key, email)
                     completion(userSnapshot.key) // UID found

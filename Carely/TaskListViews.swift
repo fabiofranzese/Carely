@@ -22,9 +22,16 @@ struct TaskListViewCaregiver: View {
                 }
             }
             let taskListView = List {
-                ForEach(tasksList.tasks) { task in
+                ForEach(tasksList.tasks
+                    .filter { !$0.isDone }
+                    .sorted(by: { $0.date.timeIntervalSince1970 < $1.date.timeIntervalSince1970 })
+                ) { task in
                     NavigationLink (destination: TaskDetailViewCaregiver(task: task)){
-                        Text(task.id)}
+                        VStack{
+                            Text(task.title)
+                            Text(task.description)
+                            Text(task.date.description)
+                        }}
                 }
             }
             taskListView
@@ -91,9 +98,16 @@ struct TaskListViewPatient: View {
                 }
             }
             let taskListView = List {
-                ForEach(tasksList.tasks) { task in
+                ForEach(tasksList.tasks
+                    .filter { !$0.isDone }
+                    .sorted(by: { $0.date.timeIntervalSince1970 < $1.date.timeIntervalSince1970 })
+                ) { task in
                     NavigationLink (destination: TaskDetailViewPatient(task: task)){
-                        Text(task.id)}
+                        VStack{
+                            Text(task.title)
+                            Text(task.description)
+                            Text(task.date.description)
+                        }}
                 }
             }
             taskListView
@@ -102,7 +116,7 @@ struct TaskListViewPatient: View {
                 print(user.getCaregiverEmail())
             }) {
                 HStack {
-                    Image(systemName: "email")
+                    Image(systemName: "mail")
                     Text("Logout")
                 }
             }
