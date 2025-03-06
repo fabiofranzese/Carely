@@ -90,11 +90,17 @@ class TaskListViewModel: ObservableObject, Identifiable {
     @Published var tasks: [TaskViewModel] = []
     private var ref: DatabaseReference!
     private let databaseURL = "https://carely-b368f-default-rtdb.europe-west1.firebasedatabase.app"
+    @AppStorage("isCaregiver") var isCaregiver = true
     
     init() {
         ref = Database.database(url: self.databaseURL).reference()
-        getTasks()
-        print(Auth.auth().currentUser?.uid ?? "no user")
+        if isCaregiver{
+            print("Caregiver Tasks Loading")
+            getTasks()
+        } else{
+            print("Patient Tasks Loading")
+            getPatientTasks()
+        }
     }
     
     private func getCurrentUserID() -> String? {
@@ -102,25 +108,70 @@ class TaskListViewModel: ObservableObject, Identifiable {
       }
     
     func getTasks() {
-        if let uid = getCurrentUserID() {
+        if let uid = getCurrentUserID(){
             var refHandle = ref.child("users/\(uid)/tasks").observe(DataEventType.value, with: {snapshot in
                 guard let value = snapshot.value as? [String: [String: Any]] else { return }
                 self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
-            })
+            })}
+    }
+    
+    func getPatientTasks() {
+        let ref = Database.database(url: self.databaseURL).reference()
+        getCaregiverEmail { email in
+            guard let email = email else {
+                print("Caregiver email not found")
+                return
+            }
+            print("email", email)
+            self.getUID(email: email) { uid in
+                guard let uid = uid else {
+                    print("User not found")
+                    return
+                }
+                print(uid)
+                // Doesn't load the tasks: TO FIX
+                var refHandle = ref.child("users/\(uid)/tasks").observe(DataEventType.value, with: {snapshot in
+                    guard let value = snapshot.value as? [String: [String: Any]] else { return }
+                    print(value)
+                    self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
+                })
+            }
         }
     }
     
-    func getCaregiverEmail() -> String {
+    func getUID(email: String, completion: @escaping (String?) -> Void) {
         let ref = Database.database(url: self.databaseURL).reference().child("patients")
-        var res = ""
-        if let uid = getCurrentUserID() {
-            var refHandle = ref.child("patients/\(uid)/caregiverEmail").observeSingleEvent(of: .value) {snapshot in
-                guard let value = snapshot.value as? String else { return }
-                res = value
+        ref.observeSingleEvent(of: .value) { snapshot in
+            for child in snapshot.children {
+                if let userSnapshot = child as? DataSnapshot,
+                   let userData = userSnapshot.value as? [String: Any],
+                   let userEmail = userData["caregiverEmail"] as? String,
+                   userEmail.lowercased() == email.lowercased() {
+                    print(userSnapshot.key, email)
+                    completion(userSnapshot.key) // UID found
+                    return
+                }
+            }
+            completion(nil) // UID not found
+        }
+    }
+    
+    func getCaregiverEmail(completion: @escaping (String?) -> Void) {
+        let ref = Database.database(url: self.databaseURL).reference()
+        
+        guard let uid = getCurrentUserID() else {
+            completion(nil)
+            return
+        }
+        
+        ref.child("patients").child(uid).child("caregiverEmail").observeSingleEvent(of: .value) { snapshot in
+            if let email = snapshot.value as? String {
+                print("res", email) // This will print AFTER data is fetched
+                completion(email)
+            } else {
+                completion(nil) // No email found
             }
         }
-        print(res)
-        return res
     }
     
     func createTask(task: [String: Any]){
@@ -135,6 +186,10 @@ class TaskListViewModel: ObservableObject, Identifiable {
             }
         }
     }
+    
+    func onViewDisappear() {
+        ref.removeAllObservers()
+      }
 }
 
 class UserViewModel: ObservableObject {
@@ -245,15 +300,23 @@ class UserViewModel: ObservableObject {
         }
     }
     
-    func emailToUID(email: String) -> String {
-        let ref = Database.database(url: self.databaseURL).reference().child("users")
+    func getCaregiverEmail() -> String {
+        let ref = Database.database(url: self.databaseURL).reference()
         var res = ""
-        ref.queryOrdered(byChild: "email").queryEqual(toValue: email).observeSingleEvent(of: .value) { snapshot in
-            print(snapshot.description)
-            res = snapshot.description
+        if let uid = getCurrentUserID() {
+            print(uid)
+            var refHandle = ref.child("patients").child(uid).child("caregiverEmail").observe(DataEventType.value, with: {snapshot in
+                guard let value = snapshot.value as? String else { return }
+                res = value
+                print(res)
+            })
         }
         return res
     }
+    
+    private func getCurrentUserID() -> String? {
+        return Auth.auth().currentUser?.uid
+      }
     
   func logout() {
     do {

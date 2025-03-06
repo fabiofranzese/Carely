@@ -22,7 +22,7 @@ struct LoginView: View {
 
           // Email textfield
           let emailInputField = HStack {
-            Image("person")
+              Image(systemName: "person")
               .resizable()
               .scaledToFit()
               .frame(width: 30.0, height: 30.0)
@@ -40,7 +40,7 @@ struct LoginView: View {
 
           // Password textfield
           let passwordInputField = HStack {
-            Image("lock")
+              Image(systemName: "lock")
               .resizable()
               .scaledToFit()
               .frame(width: 30.0, height: 30.0)
@@ -120,7 +120,7 @@ struct SignUpView: View {
             }
               // Email textfield
               let emailInputField = HStack {
-                Image("person")
+                  Image(systemName: "person")
                   .resizable()
                   .scaledToFit()
                   .frame(width: 30.0, height: 30.0)
@@ -138,7 +138,7 @@ struct SignUpView: View {
 
               // Password textfield
               let passwordInputField = HStack {
-                Image("lock")
+                  Image(systemName: "lock")
                   .resizable()
                   .scaledToFit()
                   .frame(width: 30.0, height: 30.0)
