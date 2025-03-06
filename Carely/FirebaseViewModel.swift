@@ -278,26 +278,26 @@ class UserViewModel: ObservableObject {
             if !snapshot.exists(){
                 self.showAlertMessage(message: "Caregiver not Found")
                 return
-            }
-        }
-                
-        Auth.auth().createUser(withEmail: email, password: password) { result, err in
-          if let err = err {
-            self.alertMessage = err.localizedDescription
-            self.alert.toggle()
-          } else {
-            self.login()
-              guard let user = result?.user else { return }
-              let uid = user.uid
-              let ref = Database.database(url: self.databaseURL).reference()
-              ref.child("patients").child(uid).setValue(["caregiver": false, "email": self.email, "caregiverEmail": self.caregiverEmail]) { error, _ in
-                  if let error = error {
-                      print("Error saving user data: \(error.localizedDescription)")
+            } else{
+                Auth.auth().createUser(withEmail: self.email, password: self.password) { result, err in
+                  if let err = err {
+                    self.alertMessage = err.localizedDescription
+                    self.alert.toggle()
                   } else {
-                      print("User data saved successfully!")
+                    self.login()
+                      guard let user = result?.user else { return }
+                      let uid = user.uid
+                      let ref = Database.database(url: self.databaseURL).reference()
+                      ref.child("patients").child(uid).setValue(["caregiver": false, "email": self.email, "caregiverEmail": self.caregiverEmail]) { error, _ in
+                          if let error = error {
+                              print("Error saving user data: \(error.localizedDescription)")
+                          } else {
+                              print("User data saved successfully!")
+                          }
+                      }
                   }
-              }
-          }
+                }
+            }
         }
     }
     
