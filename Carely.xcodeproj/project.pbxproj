@@ -48,6 +48,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7F657B692D7B0AEE003E802B /* Exceptions for "CarelyWatchOS Watch App" folder in "CarelyWatchOS Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"CarelyWatchOS-Watch-App-Info.plist",
+			);
+			target = 7F657AB52D7AE7A0003E802B /* CarelyWatchOS Watch App */;
+		};
 		7FBC8B782D799722007A6123 /* Exceptions for "Carely" folder in "Carely" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -60,6 +67,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7F657AB72D7AE7A0003E802B /* CarelyWatchOS Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7F657B692D7B0AEE003E802B /* Exceptions for "CarelyWatchOS Watch App" folder in "CarelyWatchOS Watch App" target */,
+			);
 			path = "CarelyWatchOS Watch App";
 			sourceTree = "<group>";
 		};
@@ -269,6 +279,7 @@
 				DEVELOPMENT_TEAM = 28MPBQ5XV2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "CarelyWatchOS-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = CarelyWatchOS;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.danielefontana.Carely;
@@ -299,6 +310,7 @@
 				DEVELOPMENT_TEAM = 28MPBQ5XV2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "CarelyWatchOS-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = CarelyWatchOS;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.danielefontana.Carely;
@@ -451,6 +463,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Carely/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -483,6 +496,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Carely/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "AppIcon.jpg",
+      "filename" : "CarelyAppIconLight.jpeg",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "AppIconDarkMode.jpg",
+      "filename" : "CarelyAppIconDark.jpeg",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
