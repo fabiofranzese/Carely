@@ -2,7 +2,7 @@
 //  FirebaseViewModel.swift
 //  Carely
 //
-//  Created by Daniele Fontana on 06/03/25.
+//  Created by Daniele Fontana on 08/03/25.
 //
 
 import Foundation
@@ -10,6 +10,7 @@ import SwiftUI
 import FirebaseDatabase
 import FirebaseCore
 import FirebaseAuth
+import WatchConnectivity
 
 struct Task : Identifiable {
     var id: UUID
@@ -112,6 +113,7 @@ class TaskListViewModel: ObservableObject, Identifiable {
             var refHandle = ref.child("users/\(uid)/tasks").observe(DataEventType.value, with: {snapshot in
                 guard let value = snapshot.value as? [String: [String: Any]] else { return }
                 self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
+                self.sendTasksToWatch()
             })}
     }
     
@@ -135,8 +137,30 @@ class TaskListViewModel: ObservableObject, Identifiable {
                     guard let value = snapshot.value as? [String: [String: Any]] else { return }
                     print(value)
                     self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
+                    self.sendTasksToWatch()
                 })
             }
+        }
+    }
+    
+    func sendTasksToWatch() {
+        if WCSession.default.isReachable {
+            let tasksData = getTasksForWatch()
+            WCSession.default.sendMessage(["tasks": tasksData], replyHandler: nil) { error in
+                print("Error sending tasks to watch: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func getTasksForWatch() -> [[String: Any]] {
+        return tasks.map { task in
+            return [
+                "id": task.id,
+                "title": task.title,
+                "description": task.description,
+                "date": task.date.timeIntervalSince1970,
+                "isDone": task.isDone
+            ]
         }
     }
     

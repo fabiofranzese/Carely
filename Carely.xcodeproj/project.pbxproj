@@ -48,13 +48,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7F657B692D7B0AEE003E802B /* Exceptions for "CarelyWatchOS Watch App" folder in "CarelyWatchOS Watch App" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"CarelyWatchOS-Watch-App-Info.plist",
-			);
-			target = 7F657AB52D7AE7A0003E802B /* CarelyWatchOS Watch App */;
-		};
 		7FBC8B782D799722007A6123 /* Exceptions for "Carely" folder in "Carely" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -67,9 +60,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7F657AB72D7AE7A0003E802B /* CarelyWatchOS Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7F657B692D7B0AEE003E802B /* Exceptions for "CarelyWatchOS Watch App" folder in "CarelyWatchOS Watch App" target */,
-			);
 			path = "CarelyWatchOS Watch App";
 			sourceTree = "<group>";
 		};
