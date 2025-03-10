@@ -131,7 +131,7 @@ class TaskListViewModel: ObservableObject, Identifiable {
                 print(uid)
                 // Doesn't load the tasks: TO FIX
                 var refHandle = ref.child("users/\(uid)/tasks").observe(DataEventType.value, with: {snapshot in
-                    print(snapshot.value)
+                    print("Snapshot ricevuto:", snapshot.value)
                     guard let value = snapshot.value as? [String: [String: Any]] else { return }
                     print(value)
                     self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }

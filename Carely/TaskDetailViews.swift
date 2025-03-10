@@ -11,13 +11,27 @@ struct TaskDetailViewCaregiver: View {
     @ObservedObject var task: TaskViewModel
     var body: some View {
         VStack {
+            
+            Spacer()
+            
             Text(task.title)
-            Button(action: {
-                task.done()
-            }) {
-                Image(systemName: "person")
-                Text("Done")
+                .font(.largeTitle)
+                .frame(height: 100)
+            
+            Text(task.description)
+                .multilineTextAlignment(.center)
+                .font(.title3)
+                .frame(height: 100)
+            
+            VStack(spacing: 10) {
+                Text("Start: \(task.interval.start.formatted())")
+                    .font(.title3)
+                Text("End: \(task.interval.end.formatted())")
+                    .font(.title3)
             }
+            .padding()
+            
+            Spacer()
         }
     }
 }
@@ -26,14 +40,40 @@ struct TaskDetailViewPatient: View {
     @ObservedObject var task: TaskViewModel
     var body: some View {
         VStack {
+            
+            Spacer()
+            
             Text(task.title)
-            Text(task.date.description)
+                .font(.largeTitle)
+                .frame(height: 100)
+            
+            Text(task.description)
+                .multilineTextAlignment(.center)
+                .font(.title3)
+                .frame(height: 100)
+            
+            VStack(spacing: 10) {
+                Text("Start: \(task.interval.start.formatted())")
+                    .font(.title3)
+                Text("End: \(task.interval.end.formatted())")
+                    .font(.title3)
+            }
+            .padding()
+            
+            Spacer()
+            
             Button(action: {
                 task.done()
+                print("done")
             }) {
-                Image(systemName: "person")
-                Text("Done")
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .frame(width: 180, height: 60)
+                    Text("\(Image(systemName: "checkmark.circle.fill")) Done")
+                        .foregroundStyle(.white)
+                }
             }
+            Spacer()
         }
     }
 }
@@ -41,6 +81,6 @@ struct TaskDetailViewPatient: View {
 struct TaskDetailView_Previews: PreviewProvider {
     static var exampleTask = TaskViewModel(id: "1", title: "Titolo esempio", description: "Descrizione Esempio", date: Date(), isRecurrent: false, interval: DateInterval(), isDone: false)
     static var previews: some View {
-        TaskDetailViewCaregiver(task: exampleTask)
+        TaskDetailViewPatient(task: exampleTask)
     }
 }

@@ -149,7 +149,20 @@ struct TaskListViewPatient: View {
     @StateObject var tasksList = TaskListViewModel()
     @StateObject var user = UserViewModel()
     var body: some View {
-        NavigationStack{
+        NavigationStack {
+            
+            HStack {
+                Button(action: {
+                    user.logout()
+                }) {
+                    Text("Logout")
+                }
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .padding(.top, -10)
+            
             let taskListView = List {
                 ForEach(tasksList.tasks
                     .filter { !$0.isDone }
@@ -167,27 +180,8 @@ struct TaskListViewPatient: View {
             taskListView
             
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: {
-                    user.logout()
-                }) {
-                    Image(systemName: "line.3.horizontal")
-                }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: {
-                    print(user.getCaregiverEmail())
-                }) {
-                    HStack {
-                        Image(systemName: "mail")
-                        Text("CG mail")
-                    }
-                }
-            }
-        }
         .onAppear {
-            tasksList.getPatientTasks()
+            tasksList.getTasks()
         }
         .onDisappear {
             tasksList.onViewDisappear()
