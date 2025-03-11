@@ -19,7 +19,7 @@ struct ContentView: View {
                 TaskListViewPatient()
             }
         } else {
-            LoginView()
+            InitialView()
         }
     }
 }
