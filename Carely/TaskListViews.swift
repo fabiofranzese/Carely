@@ -50,6 +50,7 @@ struct TaskListViewCaregiver: View {
         }
         .onAppear {
             tasksList.getTasks()
+            tasksList.getTasksForWatch()
           }
           .onDisappear {
               tasksList.onViewDisappear()

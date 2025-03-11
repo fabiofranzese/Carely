@@ -225,6 +225,7 @@ class UserViewModel: ObservableObject {
   @Published var alert = false
   @Published var alertMessage = ""
     @Published var caregiverEmail = ""
+    @Published var patientEmail = ""
     
     private let databaseURL = "https://carely-b368f-default-rtdb.europe-west1.firebasedatabase.app"
     
@@ -289,7 +290,27 @@ class UserViewModel: ObservableObject {
           }
       }
     }
+        Auth.auth().createUser(withEmail: patientEmail, password: password) { result, err in
+                  if let err = err {
+                    self.alertMessage = err.localizedDescription
+                    self.alert.toggle()
+                  } else {
+                    self.login()
+                      guard let user = result?.user else { return }
+                      let uid = user.uid
+                      let ref = Database.database(url: self.databaseURL).reference()
+                      ref.child("patients").child(uid).setValue(["caregiver": false, "email": self.patientEmail, "caregiverEmail" : self.email]) { error, _ in
+                          if let error = error {
+                              print("Error saving user data: (error.localizedDescription)")
+                          } else {
+                              print("User data saved successfully!")
+                          }
+                      }
+                  }
+                }
+        
   }
+    
     
     func patientSignUp() {
         if email.isEmpty || password.isEmpty {

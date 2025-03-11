@@ -104,7 +104,6 @@ struct LoginView: View {
 struct SignUpView: View {
     @ObservedObject var user: UserViewModel
     @Binding var isPresented: Bool
-    @State private var caregiverChoice: Bool = true
     var body: some View {
         let signUpView = VStack {
               // Sign up title
@@ -114,10 +113,6 @@ struct SignUpView: View {
               Spacer()
                 .frame(idealHeight: 0.1 * UIScreen.main.bounds.height)
                 .fixedSize()
-            Picker("Role", selection: $caregiverChoice) {
-                Text("Caregiver").tag(true)
-                Text("Patient").tag(false)
-            }
               // Email textfield
               let emailInputField = HStack {
                   Image(systemName: "person")
@@ -154,23 +149,20 @@ struct SignUpView: View {
               Spacer()
                 .frame(idealHeight: 0.05 * UIScreen.main.bounds.height)
                 .fixedSize()
-            if !caregiverChoice {
                 HStack {
                   Image("person")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 30.0, height: 30.0)
                     .opacity(0.5)
-                    TextField("Caregiver Email", text: $user.caregiverEmail)
+                    TextField("Patient Email", text: $user.patientEmail)
                   .keyboardType(.emailAddress)
                   .autocapitalization(UITextAutocapitalizationType.none)
                 }
                 .padding(0.02 * UIScreen.main.bounds.height)
-                Text(user.caregiverEmail)
+            Text(user.patientEmail)
                 Text(user.email)
-            }
-              // Sign up button
-            let signUpButton = if caregiverChoice {
+            let signUpButton =
                 Button(action: user.signUp) {
                     Text("Sign up".uppercased())
                         .foregroundColor(.white)
@@ -179,16 +171,6 @@ struct SignUpView: View {
                 }
                 .padding(0.025 * UIScreen.main.bounds.height)
                 .background(Capsule().fill(Color(.systemTeal)))
-            } else{
-                Button(action: user.patientSignUp) {
-                    Text("Sign up".uppercased())
-                        .foregroundColor(.white)
-                        .font(.title2)
-                        .bold()
-                }
-                .padding(0.025 * UIScreen.main.bounds.height)
-                .background(Capsule().fill(Color(.systemTeal)))
-            }
 
             signUpButton
               .buttonStyle(BorderlessButtonStyle())

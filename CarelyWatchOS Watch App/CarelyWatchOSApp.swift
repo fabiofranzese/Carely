@@ -23,6 +23,7 @@ struct CarelyWatchOSApp: App {
 
 class WatchViewModel: NSObject, ObservableObject, WCSessionDelegate {
     @Published var tasks: [WatchTask] = []
+    @Published var isSynced: Bool = false
     
     override init() {
         super.init()
@@ -33,6 +34,7 @@ class WatchViewModel: NSObject, ObservableObject, WCSessionDelegate {
         }
     }
     
+
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if let error = error {
             print("WCSession activation failed with error: \(error.localizedDescription)")
@@ -40,7 +42,6 @@ class WatchViewModel: NSObject, ObservableObject, WCSessionDelegate {
         }
         print("WCSession activated with state: \(activationState.rawValue)")
     }
-    
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         if let tasksData = message["tasks"] as? [[String: Any]] {
@@ -61,6 +62,7 @@ class WatchViewModel: NSObject, ObservableObject, WCSessionDelegate {
                         isDone: isDone
                     )
                 }
+                self.isSynced = true
             }
         }
     }
