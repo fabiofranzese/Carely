@@ -59,87 +59,112 @@ struct SignInView: View {
     @Binding var isPresented: Bool
 
     var body: some View {
-        VStack {
-
-
-            Spacer()
-                .frame(idealHeight: 0.1 * UIScreen.main.bounds.height)
-                .fixedSize()
-
-            VStack(alignment: .center, spacing: 8) {
+        ScrollView {
+            VStack {
                 HStack {
-                    Image(systemName: "person")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30.0, height: 30.0)
-                        .opacity(0.5)
-                    TextField("Email", text: $user.email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Text("Cancel")
+                            .font(.body)
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.leading, 20)
+                    Spacer()
                 }
-                .padding(0.02 * UIScreen.main.bounds.height)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.purple, lineWidth: 1)
-                )
-                .frame(width: UIScreen.main.bounds.width * 0.9)
+                .padding(.top, 20)
 
-                Text("If you’re the Caregiver, add the Care-Reciever email in order to start your journey with Carely.")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.leading)
+                Image("ModalLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: UIScreen.main.bounds.width * 0.7)
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+
+                VStack(alignment: .center, spacing: 8) {
+                    HStack {
+                        Image(systemName: "person")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30.0, height: 10.0)
+                            .foregroundColor(.purple.opacity(1))
+                        ZStack(alignment: .leading) {
+                            if user.email.isEmpty {
+                                Text("Email")
+                                    .foregroundColor(.purple.opacity(1))
+                            }
+                            TextField("", text: $user.email)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                                .foregroundColor(.purple)
+                        }
+                    }
+                    .padding(0.02 * UIScreen.main.bounds.height)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(12)
                     .frame(width: UIScreen.main.bounds.width * 0.9)
-            }
-            .padding(.bottom, 20)
 
-            VStack(alignment: .center, spacing: 8) {
-                HStack {
-                    Image(systemName: "lock")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30.0, height: 30.0)
-                        .opacity(0.5)
-                    SecureField("Password", text: $user.password)
+                    Text("If you’re the Caregiver, add the Care-Reciever email in order to start your journey with Carely.")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                        .frame(width: UIScreen.main.bounds.width * 0.9)
                 }
-                .padding(0.02 * UIScreen.main.bounds.height)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.purple, lineWidth: 1)
-                )
-                .frame(width: UIScreen.main.bounds.width * 0.9)
+                .padding(.bottom, 20)
 
-                Text("If you’re the Caregiver, add the same password you used for your account.")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.leading)
+                VStack(alignment: .center, spacing: 8) {
+                    HStack {
+                        Image(systemName: "lock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30.0, height: 10.0)
+                            .foregroundColor(.purple.opacity(1))
+                        ZStack(alignment: .leading) {
+                            if user.password.isEmpty {
+                                Text("Password")
+                                    .foregroundColor(.purple.opacity(1))
+                            }
+                            SecureField("", text: $user.password)
+                                .foregroundColor(.purple)
+                        }
+                    }
+                    .padding(0.02 * UIScreen.main.bounds.height)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(12)
                     .frame(width: UIScreen.main.bounds.width * 0.9)
-            }
-            .padding(.bottom, 20)
 
-            Spacer()
-                .frame(idealHeight: 0.05 * UIScreen.main.bounds.height)
-                .fixedSize()
-
-           
-            Button(action: {
-                user.login()
-                if !user.alert {
-                    isPresented = false
+                    Text("If you’re the Caregiver, add the same password you used for your account.")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                        .frame(width: UIScreen.main.bounds.width * 0.9)
                 }
-            }) {
-                Text("Sign In")
-                    .foregroundColor(.white)
-                    .font(.title2)
-                    .bold()
-                    .padding(0.025 * UIScreen.main.bounds.height)
-                    .frame(width: UIScreen.main.bounds.width * 0.8)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.purple))
-            }
-            .buttonStyle(BorderlessButtonStyle())
+                .padding(.bottom, 20)
 
-            Spacer()
+                Spacer()
+                    .frame(height: UIScreen.main.bounds.height * 0.2)
+
+                Button(action: {
+                    user.login()
+                    if !user.alert {
+                        isPresented = false
+                    }
+                }) {
+                    Text("Sign In")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                        .bold()
+                        .padding(0.025 * UIScreen.main.bounds.height)
+                        .frame(width: UIScreen.main.bounds.width * 0.9)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.purple))
+                }
+                .buttonStyle(BorderlessButtonStyle())
+
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.bottom, 20)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .alert(isPresented: $user.alert) {
             Alert(
                 title: Text("Message"),
@@ -155,92 +180,128 @@ struct SignUpView: View {
     @Binding var isPresented: Bool
 
     var body: some View {
-        VStack {
-            Spacer()
-                .frame(idealHeight: 0.1 * UIScreen.main.bounds.height)
-                .fixedSize()
-
-            VStack(alignment: .center, spacing: 8) {
+        ScrollView {
+            VStack {
                 HStack {
-                    Image(systemName: "person")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30.0, height: 30.0)
-                        .opacity(0.5)
-                    TextField("Email", text: $user.email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Text("Cancel")
+                            .font(.body)
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.leading, 20)
+                    Spacer()
                 }
-                .padding(0.02 * UIScreen.main.bounds.height)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.purple, lineWidth: 1)
-                )
-                .frame(width: UIScreen.main.bounds.width * 0.9)
+                .padding(.top, 20)
+
+                Image("ModalLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: UIScreen.main.bounds.width * 0.7)
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
+
+                VStack(alignment: .center, spacing: 8) {
+                    HStack {
+                        Image(systemName: "person")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30.0, height: 10.0)
+                            .foregroundColor(.purple.opacity(1))
+                        ZStack(alignment: .leading) {
+                            if user.email.isEmpty {
+                                Text("Email")
+                                    .foregroundColor(.purple.opacity(1))
+                            }
+                            TextField("", text: $user.email)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                                .foregroundColor(.purple)
+                        }
+                    }
+                    .padding(0.02 * UIScreen.main.bounds.height)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(12)
+                    .frame(width: UIScreen.main.bounds.width * 0.9)
+                }
+                .padding(.bottom, 20)
+
+                VStack(alignment: .center, spacing: 8) {
+                    HStack {
+                        Image(systemName: "lock")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30.0, height: 10.0)
+                            .foregroundColor(.purple.opacity(1))
+                        ZStack(alignment: .leading) {
+                            if user.password.isEmpty {
+                                Text("Password")
+                                    .foregroundColor(.purple.opacity(1))
+                            }
+                            SecureField("", text: $user.password)
+                                .foregroundColor(.purple)
+                        }
+                    }
+                    .padding(0.02 * UIScreen.main.bounds.height)
+                    .background(Color(.systemGray5))
+                    .cornerRadius(12)
+                    .frame(width: UIScreen.main.bounds.width * 0.9)
+                }
+                .padding(.bottom, 20)
+
+                VStack(alignment: .center, spacing: 8) {
+                    HStack {
+                        Image(systemName: "person")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 30.0, height: 10.0)
+                            .foregroundColor(.purple.opacity(1))
+                        ZStack(alignment: .leading) {
+                            if user.patientEmail.isEmpty {
+                                Text("Patient Email")
+                                    .foregroundColor(.purple.opacity(1))
+                            }
+                            TextField("", text: $user.patientEmail)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
+                                .foregroundColor(.purple)
+                        }
+                    }
+                    .padding(0.02 * UIScreen.main.bounds.height)
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.purple, lineWidth: 1)
+                    )
+                    .frame(width: UIScreen.main.bounds.width * 0.9)
+                }
+                .padding(.bottom, 20)
+
+                Spacer()
+                    .frame(height: UIScreen.main.bounds.height * 0.2)
+
+                Button(action: {
+                    user.signUp()
+                    if !user.alert {
+                        isPresented = false
+                    }
+                }) {
+                    Text("Sign Up")
+                        .foregroundColor(.white)
+                        .font(.title2)
+                        .bold()
+                        .padding(0.025 * UIScreen.main.bounds.height)
+                        .frame(width: UIScreen.main.bounds.width * 0.9)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.purple))
+                }
+                .buttonStyle(BorderlessButtonStyle())
+
+                Spacer()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.bottom, 20)
-
-            VStack(alignment: .center, spacing: 8) {
-                HStack {
-                    Image(systemName: "lock")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30.0, height: 30.0)
-                        .opacity(0.5)
-                    SecureField("Password", text: $user.password)
-                }
-                .padding(0.02 * UIScreen.main.bounds.height)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.purple, lineWidth: 1)
-                )
-                .frame(width: UIScreen.main.bounds.width * 0.9)
-            }
-            .padding(.bottom, 20)
-
-            VStack(alignment: .center, spacing: 8) {
-                HStack {
-                    Image(systemName: "person")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30.0, height: 30.0)
-                        .opacity(0.5)
-                    TextField("Patient Email", text: $user.patientEmail)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                }
-                .padding(0.02 * UIScreen.main.bounds.height)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.purple, lineWidth: 1)
-                )
-                .frame(width: UIScreen.main.bounds.width * 0.9)
-            }
-            .padding(.bottom, 20)
-
-            Spacer()
-                .frame(idealHeight: 0.05 * UIScreen.main.bounds.height)
-                .fixedSize()
-
-            Button(action: {
-                user.signUp()
-                if !user.alert {
-                    isPresented = false
-                }
-            }) {
-                Text("Sign Up")
-                    .foregroundColor(.white)
-                    .font(.title2)
-                    .bold()
-                    .padding(0.025 * UIScreen.main.bounds.height)
-                    .frame(width: UIScreen.main.bounds.width * 0.8)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.purple))
-            }
-            .buttonStyle(BorderlessButtonStyle())
-
-            Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .alert(isPresented: $user.alert) {
             Alert(
                 title: Text("Message"),
