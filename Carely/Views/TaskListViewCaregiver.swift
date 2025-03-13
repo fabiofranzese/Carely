@@ -16,104 +16,114 @@ struct TaskListViewCaregiver: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-            
-                    HStack {
-                        Button(action: {
-                            showLogoutAlert = true
-                        }) {
-                            HStack {
-                                Image(systemName: "person")
-                                Text("Logout")
+            ZStack(alignment: .topLeading) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Spacer()
+                            .frame(height: 50)
+
+                        Text("To-do Tasks")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(.horizontal)
+
+    
+                        TextField("Search tasks...", text: $searchText)
+                            .padding(10)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(8)
+                            .padding(.horizontal)
+
+
+                        Text("DELAYS")
+                            .font(.headline)
+                            .foregroundColor(.purple)
+                            .padding(.horizontal)
+
+                        Divider()
+                            .padding(.vertical)
+
+                        LazyVGrid(columns: [GridItem(.flexible(), spacing: 16), GridItem(.flexible())], spacing: 16) {
+                            NavigationLink(destination: CompletedView(tasksList: tasksList)) {
+                                BoxView(
+                                    icon: "checkmark.seal",
+                                    title: "Completed",
+                                    count: tasksList.tasks.filter { $0.isDone }.count,
+                                    color: .black
+                                )
+                            }
+
+                            NavigationLink(destination: EmptyView()) {
+                                BoxView(
+                                    icon: "timer",
+                                    title: "Scheduled",
+                                    count: 0,
+                                    color: .black
+                                )
+                            }
+
+                            NavigationLink(destination: AllTasksView(tasksList: tasksList)) {
+                                BoxView(
+                                    icon: "tray",
+                                    title: "All",
+                                    count: tasksList.tasks.filter { !$0.isDone }.count,
+                                    color: .black
+                                )
+                            }
+
+                            NavigationLink(destination: EmptyView()) {
+                                BoxView(
+                                    icon: "note.text",
+                                    title: "Notes",
+                                    count: nil,
+                                    color: .black
+                                )
                             }
                         }
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
-                        Button("Yes", role: .destructive) {
-                            user.logout()
+                        .padding(.horizontal)
+
+ 
+                        VStack {
+                            Text("Create the first task for your care receiver.")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                            Text("Tap the plus button to get started.")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
                         }
-                        Button("No", role: .cancel) {
-                        }
-                    }
-
-                    Text("To-do Tasks")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding(.horizontal)
-
-                    TextField("Search tasks...", text: $searchText)
-                        .padding(10)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(8)
-                        .padding(.horizontal)
-
-                    Text("DELAYS")
-                        .font(.headline)
-                        .padding(.horizontal)
-
-                    Rectangle()
-                        .frame(height: 100)
-                        .foregroundColor(Color(.systemGray5))
-                        .cornerRadius(8)
-                        .padding(.horizontal)
-
-                    Divider()
+                        .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.vertical)
 
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 16), GridItem(.flexible())], spacing: 16) {
 
-                        NavigationLink(destination: CompletedView(tasksList: tasksList)) {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 100)
-                                .foregroundColor(Color(.systemGray5))
-                                .overlay(Text("Completed").foregroundColor(.black))
+                        Button(action: {
+                            addTask = true
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.largeTitle)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .clipShape(Circle())
                         }
-
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(height: 100)
-                            .foregroundColor(Color(.systemGray5))
-                            .overlay(Text("Scheduled").foregroundColor(.black))
-
-                        NavigationLink(destination: AllTasksView(tasksList: tasksList)) {
-                            RoundedRectangle(cornerRadius: 10)
-                                .frame(height: 100)
-                                .foregroundColor(Color(.systemGray5))
-                                .overlay(Text("All").foregroundColor(.black))
-                        }
-
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(height: 100)
-                            .foregroundColor(Color(.systemGray5))
-                            .overlay(Text("Notes").foregroundColor(.black))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.bottom)
                     }
-                    .padding(.horizontal)
+                }
 
-                    VStack {
-                        Text("Create the first task for your care receiver.")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Text("Tap the plus button to get started.")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                Button(action: {
+                    showLogoutAlert = true
+                }) {
+                    HStack {
+                        Image(systemName: "person")
+                        Text("Logout")
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.vertical)
-
-                    Button(action: {
-                        addTask = true
-                    }) {
-                        Image(systemName: "plus")
-                            .font(.largeTitle)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .clipShape(Circle())
+                }
+                .padding(.horizontal)
+                .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
+                    Button("Yes", role: .destructive) {
+                        user.logout()
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.bottom)
+                    Button("No", role: .cancel) {}
                 }
             }
             .sheet(isPresented: $addTask) {
@@ -135,3 +145,4 @@ struct TaskListViewCaregiver_Previews: PreviewProvider {
         TaskListViewCaregiver()
     }
 }
+
