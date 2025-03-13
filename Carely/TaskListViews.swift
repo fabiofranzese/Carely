@@ -79,9 +79,3 @@ struct TaskListViewPatient: View {
           }
     }
 }
-
-struct TaskListViewCaregiver_Previews: PreviewProvider {
-    static var previews: some View {
-        TaskListViewCaregiver()
-    }
-}
