@@ -12,5 +12,5 @@ struct WatchTask: Identifiable {
     let title: String
     let description: String
     let date: Date
-    let isDone: Bool
+    var isDone: Bool
 }

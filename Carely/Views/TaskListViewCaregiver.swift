@@ -6,17 +6,19 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct TaskListViewCaregiver: View {
     @StateObject var tasksList = TaskListViewModel()
     @StateObject var user = UserViewModel()
     @State var addTask: Bool = false
     @State private var searchText: String = ""
+    @State private var showMenu: Bool = false
     @State private var showLogoutAlert: Bool = false
-
+    
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .topLeading) {
+            ZStack(alignment: .topTrailing) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         Spacer()
@@ -27,13 +29,11 @@ struct TaskListViewCaregiver: View {
                             .bold()
                             .padding(.horizontal)
 
-    
                         TextField("Search tasks...", text: $searchText)
                             .padding(10)
                             .background(Color(.systemGray6))
                             .cornerRadius(8)
                             .padding(.horizontal)
-
 
                         Text("DELAYS")
                             .font(.headline)
@@ -82,7 +82,6 @@ struct TaskListViewCaregiver: View {
                         }
                         .padding(.horizontal)
 
- 
                         VStack {
                             Text("Create the first task for your care receiver.")
                                 .font(.subheadline)
@@ -93,7 +92,6 @@ struct TaskListViewCaregiver: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.vertical)
-
 
                         Button(action: {
                             addTask = true
@@ -110,24 +108,36 @@ struct TaskListViewCaregiver: View {
                     }
                 }
 
-                Button(action: {
-                    showLogoutAlert = true
-                }) {
-                    HStack {
-                        Image(systemName: "person")
-                        Text("Logout")
+                Menu {
+                    if let email = Auth.auth().currentUser?.email {
+                        Text("Logged in as: \(email)")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                     }
-                }
-                .padding(.horizontal)
-                .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
-                    Button("Yes", role: .destructive) {
-                        user.logout()
+                    Button(role: .destructive, action: {
+                        showLogoutAlert = true 
+                    }) {
+                        Label("Logout", systemImage: "person.fill.xmark")
                     }
-                    Button("No", role: .cancel) {}
+                } label: {
+                    Image(systemName: showMenu ? "person.circle.fill" : "person.circle")
+                        .font(.title)
+                        .foregroundColor(.purple)
+                        .padding()
                 }
+                .onTapGesture {
+                    showMenu.toggle()
+                }
+                .padding(.trailing, 16)
             }
             .sheet(isPresented: $addTask) {
                 addTaskViewContent(user: user, isPresented: $addTask, tasksList: tasksList)
+            }
+            .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
+                Button("Yes", role: .destructive) {
+                    user.logout()
+                }
+                Button("No", role: .cancel) {}
             }
             .onAppear {
                 tasksList.getTasks()

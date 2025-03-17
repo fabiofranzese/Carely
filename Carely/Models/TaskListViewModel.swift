@@ -12,18 +12,26 @@ import FirebaseCore
 import FirebaseAuth
 import WatchConnectivity
 
-class TaskListViewModel: ObservableObject, Identifiable {
+class TaskListViewModel: NSObject, ObservableObject, Identifiable {
     @Published var tasks: [TaskViewModel] = []
     private var ref: DatabaseReference!
     private let databaseURL = "https://carely-b368f-default-rtdb.europe-west1.firebasedatabase.app"
     @AppStorage("isCaregiver") var isCaregiver = true
     
-    init() {
+    override init() {
+        super.init()
         ref = Database.database(url: self.databaseURL).reference()
-        if isCaregiver{
+        
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+
+        if isCaregiver {
             print("Caregiver Tasks Loading")
             getTasks()
-        } else{
+        } else {
             print("Patient Tasks Loading")
             getPatientTasks()
         }
@@ -31,15 +39,16 @@ class TaskListViewModel: ObservableObject, Identifiable {
     
     private func getCurrentUserID() -> String? {
         return Auth.auth().currentUser?.uid
-      }
+    }
     
     func getTasks() {
-        if let uid = getCurrentUserID(){
-            var refHandle = ref.child("users/\(uid)/tasks").observe(DataEventType.value, with: {snapshot in
+        if let uid = getCurrentUserID() {
+            ref.child("users/\(uid)/tasks").observe(.value) { snapshot in
                 guard let value = snapshot.value as? [String: [String: Any]] else { return }
                 self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
-                self.sendTasksToWatch()
-            })}
+                self.sendTasksToWatch() 
+            }
+        }
     }
     
     func getPatientTasks() {
@@ -56,24 +65,26 @@ class TaskListViewModel: ObservableObject, Identifiable {
                     return
                 }
                 print(uid)
-                // Doesn't load the tasks: TO FIX
-                var refHandle = ref.child("users/\(uid)/tasks").observe(DataEventType.value, with: {snapshot in
+                ref.child("users/\(uid)/tasks").observe(.value) { snapshot in
                     print(snapshot.value)
                     guard let value = snapshot.value as? [String: [String: Any]] else { return }
                     print(value)
                     self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
                     self.sendTasksToWatch()
-                })
+                }
             }
         }
     }
     
     func sendTasksToWatch() {
-        if WCSession.default.isReachable {
-            let tasksData = getTasksForWatch()
-            WCSession.default.sendMessage(["tasks": tasksData], replyHandler: nil) { error in
-                print("Error sending tasks to watch: \(error.localizedDescription)")
-            }
+        let tasksData = getTasksForWatch()
+        let context: [String: Any] = ["tasks": tasksData]
+
+        do {
+            try WCSession.default.updateApplicationContext(context)
+            print("Dati inviati correttamente tramite applicationContext")
+        } catch {
+            print("Errore durante l'invio dei dati tramite applicationContext: \(error.localizedDescription)")
         }
     }
     
@@ -124,8 +135,8 @@ class TaskListViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func createTask(task: [String: Any]){
-        if let uid = getCurrentUserID(){
+    func createTask(task: [String: Any]) {
+        if let uid = getCurrentUserID() {
             let userRef = ref.child("users/\(uid)/tasks")
             userRef.childByAutoId().setValue(task) { error, _ in
                 if let error = error {
@@ -137,7 +148,49 @@ class TaskListViewModel: ObservableObject, Identifiable {
         }
     }
     
+    func markTaskAsDone(taskId: String) {
+        if let uid = getCurrentUserID() {
+            ref.child("users/\(uid)/tasks/\(taskId)/isDone").setValue(true) { error, _ in
+                if let error = error {
+                    print("Error marking task as done: \(error.localizedDescription)")
+                } else {
+                    print("Task marked as done successfully!")
+                }
+            }
+        }
+    }
+    
     func onViewDisappear() {
         ref.removeAllObservers()
-      }
+    }
 }
+
+// MARK: - WCSessionDelegate
+extension TaskListViewModel: WCSessionDelegate {
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if let error = error {
+            print("WCSession activation failed with error: \(error.localizedDescription)")
+            return
+        }
+        print("WCSession activated with state: \(activationState.rawValue)")
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        if let taskId = message["taskId"] as? String {
+            DispatchQueue.main.async {
+                self.markTaskAsDone(taskId: taskId)
+            }
+        }
+    }
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        print("WCSession became inactive")
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        print("WCSession deactivated")
+        // Reactivate the session if needed
+        WCSession.default.activate()
+    }
+}
+

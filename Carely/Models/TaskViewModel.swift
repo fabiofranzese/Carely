@@ -56,12 +56,19 @@ class TaskViewModel: ObservableObject, Identifiable {
       }
     
     func done() {
-        if let uid = getCurrentUserID(){
+        if let uid = getCurrentUserID() {
             var done = true
-            if self.isDone{
+            if self.isDone {
                 done = false
             }
-            ref.child("users/\(uid)/tasks/\(id)/isDone").setValue(done)
+            ref.child("users/\(uid)/tasks/\(id)/isDone").setValue(done) { error, _ in
+                if let error = error {
+                    print("Error updating task status: \(error.localizedDescription)")
+                } else {
+                    print("Task status updated successfully!")
+                }
+            }
         }
     }
 }
+
