@@ -46,7 +46,7 @@ struct InitialView: View {
             Text("Don't you have an account?")
                 .font(.subheadline)
                 .foregroundColor(.gray)
-                .padding(.top, 20)
+                .padding(.top, 10)
 
             Button(action: {
                 showSignUpView = true

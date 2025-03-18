@@ -57,7 +57,7 @@ struct SignInView: View {
                     .cornerRadius(12)
                     .frame(width: UIScreen.main.bounds.width * 0.9)
 
-                    Text("If you’re the Caregiver, add the Care-Reciever email in order to start your journey with Carely.")
+                    Text("If you’re the Caregiver, add your email or the Care-Reciever email in order to start your journey with Carely.")
                         .font(.caption)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.leading)
@@ -86,7 +86,7 @@ struct SignInView: View {
                     .cornerRadius(12)
                     .frame(width: UIScreen.main.bounds.width * 0.9)
 
-                    Text("If you’re the Caregiver, add the same password you used for your account.")
+                    Text("It's the same for both Caregiver and Care-Receiver accounts.")
                         .font(.caption)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.leading)
