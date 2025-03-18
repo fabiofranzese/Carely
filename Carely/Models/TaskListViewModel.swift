@@ -22,6 +22,7 @@ class TaskListViewModel: NSObject, ObservableObject, Identifiable {
         super.init()
         ref = Database.database(url: self.databaseURL).reference()
         
+        // Attiva la sessione WatchConnectivity
         if WCSession.isSupported() {
             let session = WCSession.default
             session.delegate = self
@@ -46,7 +47,7 @@ class TaskListViewModel: NSObject, ObservableObject, Identifiable {
             ref.child("users/\(uid)/tasks").observe(.value) { snapshot in
                 guard let value = snapshot.value as? [String: [String: Any]] else { return }
                 self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
-                self.sendTasksToWatch() 
+                self.sendTasksToWatch() // Invia i task all'Apple Watch
             }
         }
     }
@@ -70,7 +71,7 @@ class TaskListViewModel: NSObject, ObservableObject, Identifiable {
                     guard let value = snapshot.value as? [String: [String: Any]] else { return }
                     print(value)
                     self.tasks = value.compactMap { TaskViewModel(id: $0, dict: $1) }
-                    self.sendTasksToWatch()
+                    self.sendTasksToWatch() // Invia i task all'Apple Watch
                 }
             }
         }
@@ -178,7 +179,9 @@ extension TaskListViewModel: WCSessionDelegate {
     func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         if let taskId = message["taskId"] as? String {
             DispatchQueue.main.async {
-                self.markTaskAsDone(taskId: taskId)
+                if let task = self.tasks.first(where: { $0.id == taskId }) {
+                    task.done() // Usa la funzione `done` per aggiornare lo stato del task
+                }
             }
         }
     }

@@ -14,9 +14,23 @@ struct InitialView: View {
 
     var body: some View {
         VStack {
+            VStack(spacing: 8) {
+                Text("Welcome to Carely")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.center)
+                
+                Text("Your personal assistant for caregiving tasks.")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.top, 40)
+            .padding(.horizontal, 20)
+
             Spacer()
-                .frame(height: UIScreen.main.bounds.height * 0.6)
-               
+
             Button(action: {
                 showSignInView = true
             }) {

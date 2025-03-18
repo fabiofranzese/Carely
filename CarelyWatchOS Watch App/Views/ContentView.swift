@@ -27,13 +27,12 @@ struct ContentView: View {
                 
                 Spacer()
                 
-
                 Button(action: {
                     watchViewModel.markTaskAsDone(taskId: nextTask.id)
                 }) {
                     Text("Done")
                         .font(.headline)
-                        .foregroundColor(.black) 
+                        .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.purple)
@@ -41,6 +40,7 @@ struct ContentView: View {
                 }
                 .padding(.horizontal)
             } else {
+                // Nessun task disponibile
                 Text("No tasks available")
                     .font(.headline)
                     .foregroundColor(.gray)
@@ -55,7 +55,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let watchViewModel = WatchViewModel()
         
-
+     
         watchViewModel.tasks = [
             WatchTask(
                 id: "1",

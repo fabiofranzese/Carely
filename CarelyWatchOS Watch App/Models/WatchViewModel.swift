@@ -28,7 +28,7 @@ class WatchViewModel: NSObject, ObservableObject, WCSessionDelegate {
         }
         print("WCSession activated with state: \(activationState.rawValue)")
     }
-
+    
     func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         if let tasksData = applicationContext["tasks"] as? [[String: Any]] {
             DispatchQueue.main.async {
@@ -52,10 +52,9 @@ class WatchViewModel: NSObject, ObservableObject, WCSessionDelegate {
             }
         }
     }
-
+    
     func markTaskAsDone(taskId: String) {
         if let index = tasks.firstIndex(where: { $0.id == taskId }) {
-            // Segna il task come completato
             tasks[index].isDone = true
             
             if WCSession.default.isReachable {

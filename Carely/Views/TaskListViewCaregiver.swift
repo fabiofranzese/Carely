@@ -131,7 +131,7 @@ struct TaskListViewCaregiver: View {
                 .padding(.trailing, 16)
             }
             .sheet(isPresented: $addTask) {
-                addTaskViewContent(user: user, isPresented: $addTask, tasksList: tasksList)
+                addTaskView(user: user, isPresented: $addTask, tasksList: tasksList)
             }
             .alert("Are you sure you want to logout?", isPresented: $showLogoutAlert) {
                 Button("Yes", role: .destructive) {
