@@ -53,11 +53,11 @@ struct TaskListViewCaregiver: View {
                                 )
                             }
 
-                            NavigationLink(destination: EmptyView()) {
+                            NavigationLink(destination: ScheduledTaskView(tasksList: tasksList)) {
                                 BoxView(
                                     icon: "timer",
                                     title: "Scheduled",
-                                    count: 0,
+                                    count: tasksList.tasks.filter { !$0.isDone }.count,
                                     color: .black
                                 )
                             }
@@ -70,6 +70,7 @@ struct TaskListViewCaregiver: View {
                                     color: .black
                                 )
                             }
+                            .tint(.purple)
 
                             NavigationLink(destination: EmptyView()) {
                                 BoxView(
@@ -99,7 +100,7 @@ struct TaskListViewCaregiver: View {
                             Image(systemName: "plus")
                                 .font(.largeTitle)
                                 .padding()
-                                .background(Color.blue)
+                                .background(Color.purple)
                                 .foregroundColor(.white)
                                 .clipShape(Circle())
                         }
