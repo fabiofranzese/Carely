@@ -127,3 +127,7 @@ struct SignInView: View {
         }
     }
 }
+
+#Preview {
+    SignInView(user: user, isPresented: .constant(true))
+}
