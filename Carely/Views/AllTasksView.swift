@@ -1,10 +1,3 @@
-//
-//  AllTasksView.swift
-//  Carely
-//
-//  Created by Daniele Fontana on 13/03/25.
-//
-
 import SwiftUI
 
 struct AllTasksView: View {
@@ -30,9 +23,15 @@ struct AllTasksView: View {
                         }
                     }
                 }
+                .onDelete(perform: delete) // Implement swipe-to-delete here
             }
             .navigationTitle("All")
         }
     }
+    
+    //TO-DO IMPLEMENT FUNCTION IN THE DATABASE
+    func delete(at offsets: IndexSet) {
+        // Remove tasks at the given index set
+        tasksList.tasks.remove(atOffsets: offsets)
+    }
 }
-

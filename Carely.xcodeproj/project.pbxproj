@@ -269,19 +269,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"CarelyWatchOS Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = 28MPBQ5XV2;
+				DEVELOPMENT_TEAM = NP4GS9TJFN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CarelyWatchOS-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = CarelyWatchOS;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.danielefontana.Carely;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.AAcademy.Carely;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielefontana.Carely.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AAcademy.Carely.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -300,19 +300,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"CarelyWatchOS Watch App/Preview Content\"";
-				DEVELOPMENT_TEAM = 28MPBQ5XV2;
+				DEVELOPMENT_TEAM = NP4GS9TJFN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "CarelyWatchOS-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = CarelyWatchOS;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.danielefontana.Carely;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.AAcademy.Carely;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielefontana.Carely.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AAcademy.Carely.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -452,7 +452,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"Carely/Preview Content\"";
-				DEVELOPMENT_TEAM = 28MPBQ5XV2;
+				DEVELOPMENT_TEAM = NP4GS9TJFN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Carely/Info.plist;
@@ -468,7 +468,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielefontana.Carely;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AAcademy.Carely;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -485,7 +485,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_ASSET_PATHS = "\"Carely/Preview Content\"";
-				DEVELOPMENT_TEAM = 28MPBQ5XV2;
+				DEVELOPMENT_TEAM = NP4GS9TJFN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Carely/Info.plist;
@@ -501,7 +501,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.danielefontana.Carely;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AAcademy.Carely;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
