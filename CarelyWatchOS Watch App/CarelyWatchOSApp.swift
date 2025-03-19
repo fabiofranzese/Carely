@@ -13,6 +13,7 @@ import WatchConnectivity
 struct CarelyWatchOSApp: App {
     @StateObject private var watchViewModel = WatchViewModel()
     
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

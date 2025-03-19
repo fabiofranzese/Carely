@@ -71,7 +71,7 @@ struct TaskListViewCaregiver: View {
                                 )
                             }
 
-                            NavigationLink(destination: EmptyView()) {
+                            NavigationLink(destination: NotesView()) {
                                 BoxView(
                                     icon: "note.text",
                                     title: "Notes",
