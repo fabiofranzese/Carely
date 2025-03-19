@@ -148,8 +148,32 @@ class TaskListViewModel: NSObject, ObservableObject, Identifiable {
             }
         }
     }
-    
     func markTaskAsDone(taskId: String) {
+            let ref = Database.database(url: self.databaseURL).reference()
+            getCaregiverEmail { email in
+                guard let email = email else {
+                    print("Caregiver email not found")
+                    return
+                }
+                print("email", email)
+                self.getUID(email: email) { uid in
+                    guard let uid = uid else {
+                        print("User not found")
+                        return
+                    }
+                    print(uid)
+                    ref.child("users/\(uid)/tasks/\(taskId)/isDone").setValue(true) { error, _ in
+                        if let error = error {
+                            print("Error marking task as done: (error.localizedDescription)")
+                        } else {
+                            print("Task marked as done successfully!")
+                        }
+                    }
+                }
+            }
+        }
+
+    /*func markTaskAsDone(taskId: String) {
         if let uid = getCurrentUserID() {
             ref.child("users/\(uid)/tasks/\(taskId)/isDone").setValue(true) { error, _ in
                 if let error = error {
@@ -159,7 +183,7 @@ class TaskListViewModel: NSObject, ObservableObject, Identifiable {
                 }
             }
         }
-    }
+    }*/
     
     func onViewDisappear() {
         ref.removeAllObservers()
